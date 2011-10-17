@@ -1,0 +1,5 @@
+You need to have the latest New Soft Serial installed over the top of the SoftwareSerial included with Arduino (http://arduiniana.org/2011/01/newsoftserial-11-beta/)
+
+Other required libraries are:
+
+TinyGPS - http://arduiniana.org/libraries/tinygps/
