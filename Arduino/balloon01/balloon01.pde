@@ -11,14 +11,14 @@
  * Connect logger rx pin to d2
  **/
 
-Temp temp(0x90 >> 1);
+Temp temp(0x91>>1);
 // RX, TX
 GPS gps(4, 5);
 GPRS gprs;
 SoftwareSerial gsm(2, 3);
 
 const int LED1PIN = 13;
-const int LOGLEN = 1000;
+const int LOGLEN = 160;
 char logline[LOGLEN];
 
 unsigned long const sensorInterval = 5000; // in milliseconds
@@ -35,35 +35,20 @@ int const latSensitivity = 100 / latSize;
 int const lonSensitivity = 100 / lonSize;
 int const altSensitivity = 100 / altSize;
 
-// blink out an error code
-// valid from 1 to 10.
-// 1 is 1 blink  100ms on 100ms off 1800ms off
-// 2 is 2 blinks 100ms on 100ms off 1600ms off
-// 3 is 3 blinks 100ms on 100ms off 1500ms off
-// ...
-// 10 is continuous blinking 100ms on 100ms off
-// repeated forever
-void error(uint8_t errno) {
-  while(1) {
-    for (int i=0; i<errno; i++) {
-      digitalWrite(LED1PIN, HIGH);
-      delay(100);
-      digitalWrite(LED1PIN, LOW);
-      delay(100);
-    }
-    delay(1000);
-  }
-}
-
 void setup()
 {
   
   // Start the HW serial port for debug + logging!
   Serial.begin(9600);
   Serial.println("\r\nBalloon logger");
+  
+  Serial.println(10);
   pinMode(LED1PIN, OUTPUT);
   digitalWrite(LED1PIN, HIGH);
   
+  Serial.print("Temp Test : ");
+  temp.capture();
+  Serial.print(temp.convertCelcius(temp.temperature));
   gsm.begin(9600);
   gps.begin(9600);
   
@@ -109,7 +94,7 @@ void loop()
   } else {
     // Passthrough nmea strings from gps to serial
     while (gps.available()) {
-      Serial.print(gps.read());
+      Serial.write(gps.read());
     }
   }
 }
