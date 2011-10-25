@@ -1,5 +1,4 @@
 
-
 #include "Temp.h"
 
 
@@ -34,7 +33,7 @@ void Temp::capture()
   int retries = 0;
   const int max_retries = 10;
   boolean found = false;
-  while (!found && max_retries < 10) {
+  while (!found && retries < max_retries) {
     retries++;
     Wire.requestFrom(sensorAddress,2);  // Request 2 bytes
     if (2 <= Wire.available())  // if two bytes were received 
